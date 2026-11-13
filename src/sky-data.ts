@@ -12,7 +12,7 @@ const catalogs = import.meta.glob('../public/sky-data/*.json', {
 export function installBundledCatalogs(loader: CatalogLoader): void {
   const originalJson = loader.json.bind(loader)
   loader.json = (url, callback) => {
-    const prefix = '/sky-data/'
+    const prefix = `${import.meta.env.BASE_URL}sky-data/`
     const catalog = url.startsWith(prefix)
       ? catalogs[`../public/sky-data/${url.slice(prefix.length)}`]
       : undefined

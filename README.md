@@ -11,6 +11,16 @@ npm run dev
 
 Open the Vite URL on the development device. Camera, location, and motion APIs require a secure origin: HTTPS in deployment, or localhost for local development. A phone opening a computer's plain HTTP LAN address is not a secure origin.
 
+## Deploy to GitHub Pages
+
+1. Push this project to the repository's `main` branch on GitHub.
+2. On GitHub, open the repository and click **Settings** > **Pages**.
+3. Under **Build and deployment**, select **GitHub Actions** as the source.
+4. Open the **Actions** tab, select **Deploy to GitHub Pages**, and run the workflow with **Run workflow** if the initial push did not deploy. Later pushes to `main` deploy automatically.
+5. Once the workflow succeeds, return to **Settings** > **Pages** and open the published site URL.
+
+GitHub Actions supplies the repository name for the Vite base path automatically. A repository named `owner.github.io` is deployed at the domain root; other repositories use `https://owner.github.io/repository/`. Local builds use `/` unless `GITHUB_REPOSITORY` is set.
+
 ## Test on a phone
 
 Use the production build for tunnel testing. It embeds the sky catalogs in the JavaScript bundle, avoiding separate catalog downloads during chart initialization. Development mode still requests individual JSON modules.

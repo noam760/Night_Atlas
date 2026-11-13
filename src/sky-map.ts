@@ -41,7 +41,7 @@ export function initializeSkyMap(): void {
     keyboard: false,
     mouse: true,
     form: false,
-    datapath: '/sky-data/',
+    datapath: `${import.meta.env.BASE_URL}sky-data/`,
     background: { fill: '#071016', opacity: 0, stroke: '#071016', width: 0 },
     stars: {
       show: true,

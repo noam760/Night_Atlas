@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { installBundledCatalogs, type CatalogLoader } from './sky-data.ts'
 
+const catalogPath = `${import.meta.env.BASE_URL}sky-data/`
+
 afterEach(() => {
   vi.unstubAllGlobals()
   vi.resetModules()
@@ -16,7 +18,7 @@ describe('bundled sky catalogs', () => {
     expect(Object.keys(files).length).toBeGreaterThanOrEqual(9)
     for (const path of Object.keys(files)) {
       const callback = vi.fn()
-      loader.json(path.replace('../public', ''), callback)
+      loader.json(path.replace('../public/sky-data/', catalogPath), callback)
       await Promise.resolve()
       expect(callback).toHaveBeenCalledWith(null, expect.any(Object))
     }
@@ -29,8 +31,8 @@ describe('bundled sky catalogs', () => {
     installBundledCatalogs(loader)
     const first = vi.fn()
     const second = vi.fn()
-    loader.json('/sky-data/mw.json', first)
-    loader.json('/sky-data/mw.json', second)
+    loader.json(`${catalogPath}mw.json`, first)
+    loader.json(`${catalogPath}mw.json`, second)
     await Promise.resolve()
     expect(first.mock.calls[0][1]).toEqual(second.mock.calls[0][1])
     expect(first.mock.calls[0][1]).not.toBe(second.mock.calls[0][1])
@@ -42,7 +44,7 @@ describe('bundled sky catalogs', () => {
     const loader: CatalogLoader = { json: vi.fn() }
     installBundledCatalogs(loader)
     const callback = vi.fn()
-    loader.json('/sky-data/stars.6.json', callback)
+    loader.json(`${catalogPath}stars.6.json`, callback)
     await Promise.resolve()
 
     const geometry = callback.mock.calls[0][1].features[0].geometry
@@ -72,7 +74,7 @@ describe('bundled sky catalogs', () => {
     const loader = { json: network }
     const callback = vi.fn()
     const chart = {
-      display: vi.fn(() => loader.json('/sky-data/mw.json', callback)),
+      display: vi.fn(() => loader.json(`${catalogPath}mw.json`, callback)),
       rotate: vi.fn(),
       skyview: vi.fn(),
       zenith: vi.fn(() => [120, 45, 0]),
@@ -90,6 +92,7 @@ describe('bundled sky catalogs', () => {
       projection: 'stereographic',
       follow: 'center',
       disableAnimations: true,
+      datapath: catalogPath,
     }))
     expect(chart.rotate).toHaveBeenCalledTimes(36)
     expect(chart.rotate).toHaveBeenNthCalledWith(2, { center: [10, 30, 0] })
